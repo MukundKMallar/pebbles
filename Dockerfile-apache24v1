@@ -1,0 +1,19 @@
+FROM debian:jessie
+
+MAINTAINER Mukund Mallar <mukund.mallar@gmail.com>
+
+ENV DEBIAN_FRONTEND noninteractive
+
+ENV TERM xterm
+
+RUN apt-get update && \
+    apt-get dist-upgrade -y && \
+    apt-get clean -y && apt-get autoclean -y && apt-get autoremove -y && \
+    apt-get install apache2 apache2-doc apache2-utils -y && \
+    rm -rf /var/lib/apt/lists/* /var/lib/log/* /tmp/* /var/tmp/*
+
+RUN sed -i '/ULIMIT_MAX_FILES/c\' /usr/sbin/apache2ctl
+
+EXPOSE 80
+
+CMD /usr/sbin/apache2ctl -D FOREGROUND
